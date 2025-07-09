@@ -14,7 +14,11 @@ import sys
 from PIL import Image
 from typing import NamedTuple
 from scene.colmap_loader import read_extrinsics_text, read_intrinsics_text, qvec2rotmat, \
-    read_extrinsics_binary, read_intrinsics_binary, read_points3D_binary, read_points3D_text
+    read_extrinsics_binary, read_intrinsics_binary, read_points3D_binary, read_points3D_text, \
+    read_points3D_ply
+
+# Et ensuite du code ou d’autres imports...
+
 from utils.graphics_utils import getWorld2View2, focal2fov, fov2focal
 import numpy as np
 import json
@@ -120,10 +124,24 @@ def readColmapCameras(cam_extrinsics, cam_intrinsics, depths_params, images_fold
 def fetchPly(path):
     plydata = PlyData.read(path)
     vertices = plydata['vertex']
+    print(f"Fields: {vertices.data.dtype.names}")
     positions = np.vstack([vertices['x'], vertices['y'], vertices['z']]).T
-    colors = np.vstack([vertices['red'], vertices['green'], vertices['blue']]).T / 255.0
-    normals = np.vstack([vertices['nx'], vertices['ny'], vertices['nz']]).T
+    colors = None
+    if all(c in vertices.data.dtype.names for c in ('red', 'green', 'blue')):
+        colors = np.vstack([vertices['red'], vertices['green'], vertices['blue']]).T / 255.0
+    else:
+        print("No colors found in PLY.")
+    normals = None
+    if all(n in vertices.data.dtype.names for n in ('nx', 'ny', 'nz')):
+        normals = np.vstack([vertices['nx'], vertices['ny'], vertices['nz']]).T
+    else:
+        print("No normals found in PLY.")
+    print(f"Loaded {len(positions)} points.")
     return BasicPointCloud(points=positions, colors=colors, normals=normals)
+
+
+
+
 
 def storePly(path, xyz, rgb):
     # Define the dtype for the structured array
@@ -205,16 +223,29 @@ def readColmapSceneInfo(path, images, depths, eval, train_test_exp, llffhold=8):
     ply_path = os.path.join(path, "sparse/0/points3D.ply")
     bin_path = os.path.join(path, "sparse/0/points3D.bin")
     txt_path = os.path.join(path, "sparse/0/points3D.txt")
-    if not os.path.exists(ply_path):
-        print("Converting point3d.bin to .ply, will happen only the first time you open the scene.")
+  # Tenter de lire le PLY si il existe
+    try:
+        xyz, rgb, _ = read_points3D_ply(ply_path)
+    except:
+        print("PLY file not found or invalid. Trying binary format.")
         try:
             xyz, rgb, _ = read_points3D_binary(bin_path)
         except:
+            print("Binary file also not found. Falling back to text format.")
             xyz, rgb, _ = read_points3D_text(txt_path)
+        
+        print(f"[DEBUG] Loaded {xyz.shape[0]} points and {rgb.shape[0]} colors from {ply_path if os.path.exists(ply_path) else 'alternative format'}")
+
+        # Si on a dû lire un autre format, on crée le fichier PLY
         storePly(ply_path, xyz, rgb)
+
+    # Ensuite, on charge le PLY (si existant ou après la conversion)
     try:
         pcd = fetchPly(ply_path)
-    except:
+        print(f"[DEBUG] Loaded BasicPointCloud with {pcd.points.shape[0]} points from PLY")
+
+    except Exception as e:
+        print(f"[ERROR] Failed to load PLY: {e}")
         pcd = None
 
     scene_info = SceneInfo(point_cloud=pcd,

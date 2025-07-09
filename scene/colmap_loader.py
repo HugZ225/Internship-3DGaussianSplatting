@@ -12,6 +12,7 @@
 import numpy as np
 import collections
 import struct
+from plyfile import PlyData
 
 CameraModel = collections.namedtuple(
     "CameraModel", ["model_id", "model_name", "num_params"])
@@ -151,6 +152,28 @@ def read_points3D_binary(path_to_model_file):
             xyzs[p_id] = xyz
             rgbs[p_id] = rgb
             errors[p_id] = error
+    return xyzs, rgbs, errors
+
+def read_points3D_ply(path):
+    """
+    Reads 3D points and colors from a PLY file.
+    Returns xyzs, rgbs, errors.
+    """
+    plydata = PlyData.read(path) 
+    vertex = plydata['vertex']
+
+    # positions
+    xyzs = np.vstack((vertex['x'], vertex['y'], vertex['z'])).T
+
+    # couleurs si elles existent
+    if 'red' in vertex and 'green' in vertex and 'blue' in vertex:
+        rgbs = np.vstack((vertex['red'], vertex['green'], vertex['blue'])).T
+    else:
+        rgbs = np.zeros_like(xyzs)
+
+    # pas d'erreur dans les PLY classiques → on met des zéros
+    errors = np.zeros((xyzs.shape[0], 1))
+
     return xyzs, rgbs, errors
 
 def read_intrinsics_text(path):
