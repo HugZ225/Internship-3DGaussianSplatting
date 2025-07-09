@@ -2,7 +2,7 @@
 
 
 
-**Here is the README from the original GitHub repository by INRIA GRAPHDECO. All the changes I made are listed in the CHANGES.md file.**
+##**Here is the README from the original GitHub repository by INRIA GRAPHDECO. All the changes I made are listed in the CHANGES.md file.**
 
 
 
