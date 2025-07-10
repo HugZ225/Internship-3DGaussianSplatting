@@ -20,5 +20,8 @@ All this functions are in the Useful Tools folder
 
 ## Visualization 
 
-The remote viewer and the real time didn't work in my computer.  
-Therefore to vizualize the results I first use Blender with this GitHub https://github.com/Kiri-Innovation/3dgs-render-blender-addon/blob/main/README.md and this tutoriel https://www.youtube.com/watch?v=WUL73wQDtcE&t=634s
+The remote viewer and real-time visualization didn’t work on my computer.
+
+To visualize the results, I first used Blender with  this GitHub repository repository and followed this tutorial.
+
+Later, someone recommended this web viewer to quickly preview the splats with better performance.
