@@ -14,3 +14,11 @@ I modified the colmap_loader.py and dataset_readers.py files to enable training 
 I made two functions to generate pointcloud (.ply files) from images and depths of the dataset.
 
 ## Useful Tools
+
+The COLMAP files need to have a special format, for example the type of the cameras has to be PINHOLE, and I made function to convert others types of cameras (SIMPLE_PINHOLE, OPEN_CV) into pinhole.  
+All this functions are in the Useful Tools folder 
+
+## Visualization 
+
+The remote viewer and the real time didn't work in my computer.  
+Therefore to vizualize the results I first use Blender with this GitHub https://github.com/Kiri-Innovation/3dgs-render-blender-addon/blob/main/README.md and this tutoriel https://www.youtube.com/watch?v=WUL73wQDtcE&t=634s
