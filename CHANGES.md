@@ -15,7 +15,8 @@ I made two functions to generate pointcloud (.ply files) from images and depths 
 
 ## Useful Tools
 
-The COLMAP files need to have a special format, for example the type of the cameras has to be PINHOLE, and I made function to convert others types of cameras (SIMPLE_PINHOLE, OPEN_CV) into pinhole.  
+The COLMAP files need to have a special format, for example the type of the cameras has to be PINHOLE, and I made function to convert others types of cameras (SIMPLE_PINHOLE, OPEN_CV) into pinhole. 
+
 All this functions are in the Useful Tools folder 
 
 ## Visualization 
