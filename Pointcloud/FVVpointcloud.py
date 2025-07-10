@@ -45,8 +45,8 @@ def load_intrinsic(cam_id, camera_path):
     raise ValueError(f"Caméra {cam_id} introuvable dans {camera_path}")
 
 def create_pointcloud_for_camera(cam_id, extrinsics_dict, camera_path):
-    color_path = f"/home/hmc/gaussian-splatting/GS_projects/data/Home/images/Cam{cam_id}.png"
-    depth_path = f"/home/hmc/gaussian-splatting/GS_projects/data/Home/depths/Cam{cam_id}.png"
+    color_path = f"/home/hmc/gaussian-splatting/GS_projects/data/NewFVV/images/Cam{cam_id}.png"
+    depth_path = f"/home/hmc/gaussian-splatting/GS_projects/data/NewFVV/depths/Cam{cam_id}.png"
 
     color_cv = cv2.imread(color_path, cv2.IMREAD_COLOR)
     color_cv = cv2.cvtColor(color_cv, cv2.COLOR_BGR2RGB)
@@ -81,15 +81,15 @@ def create_pointcloud_for_camera(cam_id, extrinsics_dict, camera_path):
 
 
 def main():
-    images_txt = "/home/hmc/gaussian-splatting/GS_projects/data/Home/sparse/0/images.txt"
-    cameras_txt = "/home/hmc/gaussian-splatting/GS_projects/data/Home/sparse/0/cameras.txt"
+    images_txt = "/home/hmc/gaussian-splatting/GS_projects/data/NewFVV/sparse/0/images.txt"
+    cameras_txt = "/home/hmc/gaussian-splatting/GS_projects/data/NewFVV/sparse/0/cameras.txt"
 
     extrinsics_dict = load_extrinsics(images_txt)
 
     pointclouds = []
     frames = []
 
-    for cam_id in range(9):
+    for cam_id in range(4):
         pcd, frame = create_pointcloud_for_camera(cam_id, extrinsics_dict, cameras_txt)
         pointclouds.append(pcd)
         frames.append(frame)
@@ -99,16 +99,6 @@ def main():
     for pcd in pointclouds[1:]:
         pcd_combined += pcd
 
-    # Downsampling par voxel grid
-    # voxel_size = 5  # en fonction de ton échelle, ajuste ça
-    # pcd_down = pcd_combined.voxel_down_sample(voxel_size)
-    
-    # # Sauvegarder fusion
-    # o3d.io.write_point_cloud("cloud_fusion_corrected_downsampled.ply", pcd_down)
-    # print(f"[INFO] Nuage fusionné et downsamplé sauvegardé sous cloud_fusion_corrected_downsampled.ply")
-    # print(f"[INFO] Nombre de points après downsampling : {len(pcd_down.points)}")
-
-       # Sauvegarder fusion
     o3d.io.write_point_cloud("cloud_fusion_corrected.ply", pcd_combined)
     print(f"[INFO] Nuage fusionné sauvegardé sous cloud_fusion_corrected.ply")
 
