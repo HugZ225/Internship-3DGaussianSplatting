@@ -11,8 +11,8 @@ I modified the *colmap_loader.py* and *dataset_readers.py* files to enable train
 
 ## Pointcloud 
 
-I made two functions to generate point clouds (.ply files) from the images and depth maps of the dataset:
-*Pointcloud_from1Cam.py*: generates a point cloud from a single camera point of view.
+I made two functions to generate point clouds (.ply files) from the images and depth maps of the dataset:  
+*Pointcloud_from1Cam.py*: generates a point cloud from a single camera point of view.  
 *FVVpointcloud.py*: generates a point cloud by combining information from all the cameras.
 
 ## Useful Tools
