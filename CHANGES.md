@@ -29,6 +29,11 @@ To visualize the results, I first used Blender with  this GitHub repository (htt
 
 Later, someone recommended this web viewer (https://antimatter15.com/splat/) to quickly preview the splats with better performance.
 
+## Depths 
+
+To generate the depth map, I put a redirection to Depth-Anything-V2
+
 ## Dataset 
+
 
 ## Results 
