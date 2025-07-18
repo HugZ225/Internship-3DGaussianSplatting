@@ -29,6 +29,13 @@ To visualize the results, I first used Blender with  this GitHub repository (htt
 
 Later, someone recommended this web viewer (https://antimatter15.com/splat/) to quickly preview the splats with better performance.
 
+## Iterations 
+
+In the training script, I modified the test_iterations and save_iterations to include more frequent checkpoints.
+Instead of only testing at iterations 7000 and 30000, the following values are now used:
+300, 1000, 3000, 5000, 7000, 10000, 15000, 22000, 30000
+This allows for a better visualization of the training progress over time.
+
 ## Depths 
 
 To generate the depth map, I put a redirection to Depth-Anything-V2
